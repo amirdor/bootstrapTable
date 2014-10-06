@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title data-zh="例子 &middot; Bootstrap Table">Examples &middot; Bootstrap Table</title>
+    <meta name="author" content="zhixin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="assets/bootstrap2.3/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" href="assets/bootstrap2.3/css/bootstrap-responsive.min.css">-->
+    <link rel="stylesheet" href="assets/bulletin/bulletin.css">
+    <link rel="stylesheet" href="../src/bootstrap-table.css">
+    <link rel="stylesheet" href="assets/highlightjs/default.min.css">
+    <link rel="stylesheet" href="docs.css">
+    <!--<link rel="stylesheet" href="//wenzhixin.net.cn/css/fork.css">-->
+    <!--[if lt IE 9]>
+    <script src="//wenzhixin.net.cn/js/html5shiv.js"></script>
+    <script src="//wenzhixin.net.cn/js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="assets/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/bulletin/jquery.bulletin.js"></script>
+    <!--<script src="assets/bootstrap2.3/js/bootstrap.min.js"></script>-->
+    <script src="../docs/examples.js"></script>
+</head>
+<body>
+
+
+
+            
+               
+                    <script>
+                        function priceSorter(a, b) {
+                            a = +a.substring(1); // remove $
+                            b = +b.substring(1);
+                            if (a > b) return 1;
+                            if (a < b) return -1;
+                            return 0;
+                        }
+                   
+                        function nameFormatter(value, row) {
+                            var icon = row.id % 2 === 0 ? 'glyphicon-star' : 'glyphicon-star-empty'
+
+                            return '<i class="glyphicon ' + icon + '"></i> ' + value;
+                        }
+
+                        function priceFormatter(value) {
+                            // 16777215 == ffffff in decimal
+                            var color = '#'+Math.floor(Math.random() * 6777215).toString(16);
+                            return '<div  style="color: ' + color + '">' +
+                                    '<i class="glyphicon glyphicon-usd"></i>' +
+                                    value.substring(1) +
+                                    '</div>';
+                        }
+            
+                        // url: /examples/bootstrap_table/data?offset=0&limit=10&search=test
+                        function queryParams(params) {
+                            return {
+                                limit: params.pageSize,
+                                offset: params.pageSize * (params.pageNumber - 1),
+                                search: params.searchText,
+                                name: params.sortName,
+                                order: params.sortOrder
+                            };
+                        }
+
+                        // url: /examples/bootstrap_table/data?page=1&number=10&search=test
+                        /*
+                        function queryParams(params) {
+                            return {
+                                page: params.pageNumber,
+                                number: params.pageSize,
+                                search: params.searchText
+                            };
+                        }
+                        */
+                    
+                        function operateFormatter(value, row, index) {
+                            return [
+                                '<a class="like" href="javascript:void(0)" title="Like">',
+                                    '<i class="glyphicon glyphicon-heart"></i>',
+                                '</a>',
+                                '<a class="edit ml10" href="javascript:void(0)" title="Edit">',
+                                    '<i class="glyphicon glyphicon-edit"></i>',
+                                '</a>',
+                                '<a class="remove ml10" href="javascript:void(0)" title="Remove">',
+                                    '<i class="glyphicon glyphicon-remove"></i>',
+                                '</a>'
+                            ].join('');
+                        }
+
+                        window.operateEvents = {
+                            'click .like': function (e, value, row, index) {
+                                alert('You click like icon, row: ' + JSON.stringify(row));
+                                console.log(value, row, index);
+                            },
+                            'click .edit': function (e, value, row, index) {
+                                alert('You click edit icon, row: ' + JSON.stringify(row));
+                                console.log(value, row, index);
+                            },
+                            'click .remove': function (e, value, row, index) {
+                                alert('You click remove icon, row: ' + JSON.stringify(row));
+                                console.log(value, row, index);
+                            }
+                        };
+                    </script>
+               
+                    
+    
+                <div class="bs-example">
+                    <table id="table-javascript"></table>
+                    <script>
+                        $(function () {
+                   
+
+                                $('#table-javascript').bootstrapTable({
+                                    method: 'get',
+                                    url: 'data2.json',
+                                    cache: false,
+                                    height: 400,
+                                    striped: true,
+                                    pagination: true,
+                                    pageSize: 50,
+                                    pageList: [10, 25, 50, 100, 200],
+                                    search: true,
+                                    showColumns: true,
+                                    showRefresh: true,
+                                    minimumCountColumns: 2,
+                                    clickToSelect: true,
+                                    columns: [{
+                                        field: 'state',
+                                        checkbox: true
+                                    }, {
+                                        field: 'id',
+                                        title: 'Item ID',
+                                        align: 'right',
+                                        valign: 'bottom',
+                                        sortable: true
+                                    }, {
+                                        field: 'name',
+                                        title: 'Item Name',
+                                        align: 'center',
+                                        valign: 'middle',
+                                        sortable: true,
+                                        formatter: nameFormatter
+                                    }, {
+                                        field: 'price',
+                                        title: 'Item Price',
+                                        align: 'left',
+                                        valign: 'top',
+                                        sortable: true,
+                                        formatter: priceFormatter,
+                                        sorter: priceSorter
+                                    }, {
+                                        field: 'operate',
+                                        title: 'Item Operate',
+                                        align: 'center',
+                                        valign: 'middle',
+                                        clickToSelect: false,
+                                        formatter: operateFormatter,
+                                        events: operateEvents
+                                    }]
+                                });
+                           
+                        });
+                    </script>
+                </div>
+             
+            </div>
+
+          
+
+<script src="../src/bootstrap-table.js"></script>
+<script src="common.js"></script>
+<script src="//wenzhixin.net.cn/js/analytics.js"></script>
+<!-- Baidu share -->
+<script id="bdshare_js" data="type=slide&amp;img=6&amp;pos=right&amp;uid=6692400"></script>
+<script id="bdshell_js"></script>
+<script src="assets/highlightjs/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53c78e93678a7b4d"></script>
+</body>
+</html>
